@@ -79,7 +79,8 @@ function drawPesticideOverlay(year, selectedState){
       try{
         console.log('pesticide circle clicked', e.state, e.value, ev);
         if(!pesticideInfoWindow) pesticideInfoWindow = new google.maps.InfoWindow();
-        const content = `<div style="min-width:220px"><strong>${e.state}</strong><br>Total use: ${numberWithCommas(Math.round(e.value))} kg</div>`;
+        const lbs = Math.round((e.value || 0) * 2.20462);
+        const content = `<div style="min-width:220px"><strong>${e.state}</strong><br>Total use: ${numberWithCommas(lbs)} lbs</div>`;
         pesticideInfoWindow.setContent(content);
         // prefer event latLng when available
         const pos = (ev && ev.latLng) ? ev.latLng : new google.maps.LatLng(lat,lng);
@@ -156,8 +157,8 @@ function initControls(){
       updateSizeDisplay();
     }
 
-    const pIn = $('pesticideInput'); const pDisp = $('pesticideInputDisplay');
-    if(pIn && pDisp){ const upd = ()=> pDisp.textContent = `${Number(pIn.value).toLocaleString()} kg / yr`; pIn.addEventListener('input', upd); upd(); }
+  const pIn = $('pesticideInput'); const pDisp = $('pesticideInputDisplay');
+  if(pIn && pDisp){ const upd = ()=> pDisp.textContent = `${Number(pIn.value).toLocaleString()} lbs / yr`; pIn.addEventListener('input', upd); upd(); }
 
     const costIn = $('pesticideCostYear'); const costDisp = $('pesticideCostYearDisplay');
     if(costIn && costDisp){ const updC = ()=> costDisp.textContent = `$${Number(costIn.value).toLocaleString()} / yr`; costIn.addEventListener('input', updC); updC(); }
@@ -600,30 +601,23 @@ function showNearestProviders(lat, lng, count=5){
 }
 
 function openRequestModalForProvider(provider){
-  // Require key inputs to be filled before opening provider request modal.
-  if(!requiredKeyInputsFilled()){
-  // save pending provider and scroll to the form so user can fill inputs
-  pendingProviderId = provider.id;
-  const pendingNote = document.getElementById('pendingProviderId');
-  if(pendingNote) pendingNote.value = provider.id;
-  const formCol = document.querySelector('.form-col'); if(formCol) formCol.scrollIntoView({behavior:'smooth'});
-    showMessage(`Please fill the job details before requesting a slot with ${provider.name}. The provider is saved as pending.`);
-    return;
+  // Always show the inline request card as a popup-like panel when clicking a provider
+  const card = $('inlineRequestCard');
+  if(card){
+    card.classList.remove('hidden');
+    $('inlineProviderInfo').innerHTML = `<p><strong>${provider.name}</strong><br/>Services: ${provider.services}</p>`;
+    const serv = provider.services && provider.services.split('|')[0];
+    if(serv) $('inlineReqService').value = serv;
+    const summary = buildJobSummaryText();
+    $('inlineReqNotes').value = `Requesting ${$('serviceSelect').value} for ${summary}`;
+    // prefill datetime to near future
+    const dt = new Date(Date.now() + 24*3600*1000); // +1 day
+    $('inlineReqDatetime').value = dt.toISOString().slice(0,16);
+    // remember provider id on the card
+    card.dataset.providerId = provider.id;
+    // ensure the card is in view
+    try{ card.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){}
   }
-  // If inputs are present, show inline request card on the page instead of a modal
-  $('inlineRequestCard').classList.remove('hidden');
-  $('inlineProviderInfo').innerHTML = `<p><strong>${provider.name}</strong><br/>Services: ${provider.services}</p>`;
-  const serv = provider.services && provider.services.split('|')[0];
-  if(serv) $('inlineReqService').value = serv;
-  const summary = buildJobSummaryText();
-  $('inlineReqNotes').value = `Requesting ${$('serviceSelect').value} for ${summary}`;
-  // prefill datetime to near future
-  const dt = new Date(Date.now() + 24*3600*1000); // +1 day
-  $('inlineReqDatetime').value = dt.toISOString().slice(0,16);
-  // store the shown provider id on the inline card so submitInlineRequest knows which provider to use
-  // (removed modal dataset usage)
-  // store the shown provider id so submitInlineRequest knows which provider to use
-  $('inlineRequestCard').dataset.providerId = provider.id;
 }
 
 function submitInlineRequest(){
@@ -649,8 +643,9 @@ function submitInlineRequest(){
 }
 
 function requiredKeyInputsFilled(){
-  // required: contactName, sizeInput (>0), pesticideInput (>=0), lossInput (>=0), pestInput (non-empty), address chosen
-  const contact = $('contactName') && $('contactName').value.trim();
+  // Relaxed gating: do not require contact fields (they may be hidden in this build)
+  // required: sizeInput (>0), pesticideInput (>=0), lossInput (>=0), pestInput (non-empty), address chosen
+  const contact = true; // optional in this build
   const size = Number($('sizeInput')&&$('sizeInput').value || 0);
   const pesticide = $('pesticideInput') && $('pesticideInput').value !== '';
   const loss = $('lossInput') && $('lossInput').value !== '';
@@ -697,7 +692,7 @@ function initCharts(){
   const pieCtx = document.getElementById('pieChart').getContext('2d');
 
   lineChart = new Chart(lineCtx, {type:'line',data:{labels:[],datasets:[{label:'CO2 avoided (t)',data:[],borderColor:'#2b7a78',backgroundColor:'rgba(43,122,120,0.1)',fill:true}]},options:{responsive:true,maintainAspectRatio:false}});
-  barChart = new Chart(barCtx, {type:'bar',data:{labels:[],datasets:[{label:'Pesticide reduced (kg)',data:[],backgroundColor:'#60a5fa'}]},options:{responsive:true,maintainAspectRatio:false}});
+  barChart = new Chart(barCtx, {type:'bar',data:{labels:[],datasets:[{label:'Pesticide reduced (lbs)',data:[],backgroundColor:'#60a5fa'}]},options:{responsive:true,maintainAspectRatio:false}});
   areaChart = new Chart(areaCtx, {type:'line',data:{labels:[],datasets:[{label:'Water saved (L)',data:[],backgroundColor:'rgba(99,102,241,0.2)',borderColor:'#6366f1',fill:true}]},options:{responsive:true,maintainAspectRatio:false}});
   pieChart = new Chart(pieCtx, {type:'pie',data:{labels:['CO2','Water','Cost'],datasets:[{data:[1,1,1],backgroundColor:['#2b7a78','#60a5fa','#fb7185']}]},options:{responsive:true,maintainAspectRatio:false}});
 }
@@ -714,7 +709,7 @@ function aggregateForFilters(filters){
   // construct time series per year for selected region(s)
   const times = [];
   for(let y=startYear;y<=currentYear;y++){
-    let totalPesticideReduced = 0;
+    let totalPesticideReduced_lbs = 0;
     let totalCO2 = 0;
     let totalWater = 0;
     let totalCost = 0;
@@ -723,17 +718,18 @@ function aggregateForFilters(filters){
       // simulate a small trend: basePesticide * (1 + trend)^(y-start)
       const trend = 0.01; // 1% annual
       const yearsAgo = currentYear - y;
-      const base = r.basePesticide * Math.pow(1+trend, -yearsAgo);
-      const pesticideReduced = base * scenario; // simple model
-      const co2 = pesticideReduced * 1.6 / 1000.0; // t
-      const water = pesticideReduced * 10; // L
-      const cost = pesticideReduced * 10; // $
-      totalPesticideReduced += pesticideReduced;
+      const base_lbs = r.basePesticide * Math.pow(1+trend, -yearsAgo); // interpret as lbs/year
+      const pesticideReduced_lbs = base_lbs * scenario; // simple model
+      const pesticideReduced_kg = pesticideReduced_lbs * 0.45359237;
+      const co2 = (pesticideReduced_kg * 1.6) / 1000.0; // t
+      const water = pesticideReduced_kg * 10; // L
+      const cost = pesticideReduced_kg * 10; // $ (placeholder per-kg basis)
+      totalPesticideReduced_lbs += pesticideReduced_lbs;
       totalCO2 += co2;
       totalWater += water;
       totalCost += cost;
     });
-    times.push({year:y,pesticideReduced:Math.round(totalPesticideReduced),co2:round(totalCO2,3),water:Math.round(totalWater),cost:Math.round(totalCost)});
+    times.push({year:y,pesticideReduced:Math.round(totalPesticideReduced_lbs),co2:round(totalCO2,3),water:Math.round(totalWater),cost:Math.round(totalCost)});
   }
   return times;
 }
@@ -768,7 +764,7 @@ function updateCharts(){
 
   // update top metric cards using latest
   try{
-    $('metricPesticide').textContent = `${series[series.length-1].pesticideReduced} kg / yr`;
+  $('metricPesticide').textContent = `${series[series.length-1].pesticideReduced} lbs / yr`;
     $('metricCO2').textContent = `${series[series.length-1].co2} t / yr`;
     $('metricWater').textContent = `${series[series.length-1].water} L / yr`;
     $('metricCost').textContent = `$${series[series.length-1].cost} / yr`;
@@ -836,7 +832,7 @@ function collectJobInputs(){
   // collect detailed inputs from form for computing outputs and saving with booking
   const size = Number($('sizeInput').value || 0);
   const unit = $('sizeUnit').value || '';
-  const pesticide = Number($('pesticideInput').value || 0);
+  const pesticide = Number($('pesticideInput').value || 0); // lbs/year from UI
   const pesticideCostYear = Number($('pesticideCostYear').value || 0);
   const loss = Number($('lossInput').value || 0);
   const pest = getPestValue() || '';
@@ -884,45 +880,48 @@ function getPesticideNames(){
 
 /* ---------- Sustainability calculation (example) ---------- */
 function computeSustainability(inputs){
-  // Inputs: {pesticide (kg/year), reduction (%), size, unit, loss, pesticideCostYear, ...}
+  // Inputs: {pesticide (lbs/year user input), reduction (%), size, unit, loss, pesticideCostYear, ...}
+  // Internally convert lbs -> kg for emission & water factors which remain kg-based.
   // Assumptions (simple demo):
-  // - Emission factor for pesticide production & use: 1.6 kgCO2e per kg pesticide (example approximate)
-  // - Water saved per kg pesticide avoided: 10 liters/kg (very rough placeholder)
+  // - Emission factor for pesticide production & use: 1.6 kgCO2e per kg pesticide
+  // - Water saved per kg pesticide avoided: 10 liters/kg (placeholder)
   const ef_co2_per_kg = 1.6; // kg CO2e per kg pesticide
   const water_per_kg = 10; // liters per kg
 
-  const pesticide = Number(inputs.pesticide || 0);
+  const pesticide_lbs = Number(inputs.pesticide || 0); // lbs/year (UI)
+  const pesticide_kg = pesticide_lbs * 0.45359237; // convert to kg/year
   const reduction_pct = Number(inputs.reduction || 50) / 100.0;
-  const pesticide_reduced = pesticide * reduction_pct; // kg/year
-  const co2_avoided_kg = pesticide_reduced * ef_co2_per_kg; // kgCO2e/year
+  const pesticide_reduced_kg = pesticide_kg * reduction_pct; // kg/year
+  const co2_avoided_kg = pesticide_reduced_kg * ef_co2_per_kg; // kgCO2e/year
   const co2_avoided_t = co2_avoided_kg / 1000.0; // metric tons/year
-  const water_saved_l = pesticide_reduced * water_per_kg; // liters/year
-  // cost savings: prefer user-provided pesticide cost/year; otherwise use placeholder $10/kg
+  const water_saved_l = pesticide_reduced_kg * water_per_kg; // liters/year
+  // cost savings: prefer user-provided pesticide cost/year; otherwise use placeholder $10 per kg-equivalent
   const cost_per_kg = inputs.cost_per_kg || 10;
   let cost_savings = 0;
   if(inputs.pesticideCostYear && inputs.pesticide>0){
-    // reduce cost proportionally to pesticide reduction
     cost_savings = inputs.pesticideCostYear * reduction_pct;
   }else{
-    cost_savings = pesticide_reduced * cost_per_kg;
+    cost_savings = pesticide_reduced_kg * cost_per_kg;
   }
 
-  // food loss reduction (naive): assume interventions reduce post-harvest loss by a fraction of current loss
+  // food loss reduction (naive) logic unchanged
   const loss_pct = Number(inputs.loss || 0);
-  const loss_reduction_pct = Math.min(25, loss_pct * 0.2 * reduction_pct); // improvement scales with pesticide reduction
-  // convert to tonnes/year if unit is kg/month (approx): annual production = kg/month * 12
+  const loss_reduction_pct = Math.min(25, loss_pct * 0.2 * reduction_pct);
   let loss_tonnes_avoided = null;
   if(inputs.unit === 'kg/month' && inputs.size){
     const annual_prod_kg = inputs.size * 12;
-    loss_tonnes_avoided = (annual_prod_kg * (loss_pct/100) * (loss_reduction_pct/100)) / 1000.0; // tonnes/year
+    loss_tonnes_avoided = (annual_prod_kg * (loss_pct/100) * (loss_reduction_pct/100)) / 1000.0;
     loss_tonnes_avoided = round(loss_tonnes_avoided,3);
   }
 
+  const pesticide_reduced_lbs = pesticide_reduced_kg * 2.20462;
+
   return {
-    pesticide_reduced_kg: round(pesticide_reduced,2),
+    pesticide_reduced_lbs: round(pesticide_reduced_lbs,2), // primary display unit
+    pesticide_reduced_kg: round(pesticide_reduced_kg,2), // reference (internal)
     pesticide_reduced_pct: round(reduction_pct*100,1),
     co2_avoided_t: round(co2_avoided_t,3),
-    co2_formula: `CO2 avoided (t/year) = pesticide_reduced (kg/year) × ${ef_co2_per_kg} kgCO2e/kg ÷ 1000`,
+    co2_formula: `CO2 avoided (t/year) = pesticide_reduced_lbs × 0.453592 kg/lb × ${ef_co2_per_kg} kgCO2e/kg ÷ 1000`,
     water_saved_l: Math.round(water_saved_l),
     cost_savings: round(cost_savings,2),
     loss_reduction_pct: round(loss_reduction_pct,2),
@@ -936,7 +935,7 @@ function computeSustainability(inputs){
 function round(n,dec=2){ return Math.round(n*Math.pow(10,dec))/Math.pow(10,dec); }
 
 function previewReport(){
-  const pesticide = Number($('pesticideInput').value || 0);
+  const pesticide = Number($('pesticideInput').value || 0); // lbs/year
   const reduction = Number($('expectedReduction').value || 50);
   const loss = Number($('lossInput').value || 0);
   const inputs = {pesticide,reduction,loss};
@@ -979,7 +978,7 @@ function updateTopMetricsFromOutputs(outputs){
     }
 
     // update each metric with animation
-  if(outputs.pesticide_reduced_kg !== undefined){ const el = $('metricPesticide'); if(el){ el.textContent='Calculating...'; setTimeout(()=>animateNumber(el, Number(outputs.pesticide_reduced_kg), ' kg / yr'), METRIC_ANIM_DELAY_MS); } }
+  if(outputs.pesticide_reduced_lbs !== undefined){ const el = $('metricPesticide'); if(el){ el.textContent='Calculating...'; setTimeout(()=>animateNumber(el, Number(outputs.pesticide_reduced_lbs), ' lbs / yr'), METRIC_ANIM_DELAY_MS); } }
   if(outputs.pesticide_reduced_pct !== undefined){ const el = $('metricPesticidePct'); if(el){ el.textContent='Calculating...'; setTimeout(()=>animateNumber(el, Number(outputs.pesticide_reduced_pct), '%'), METRIC_ANIM_DELAY_MS); } }
   if(outputs.co2_avoided_t !== undefined){ const el = $('metricCO2'); if(el){ el.textContent='Calculating...'; setTimeout(()=>animateNumber(el, Number(outputs.co2_avoided_t), ' t / yr'), METRIC_ANIM_DELAY_MS); } }
     if(outputs.co2_avoided_t !== undefined){ const el = $('metricCO2Delta'); const pct = outputs.pesticide_reduced_pct!==undefined ? `${outputs.pesticide_reduced_pct}% reduction` : 'Based on inputs'; el.textContent = `Based on inputs — ${pct}`; }
@@ -992,7 +991,7 @@ function renderReport(outputs, inputs){
   const c = $('reportContent');
   c.innerHTML = `
     <h4>Snapshot</h4>
-    <p><strong>Pesticide reduction:</strong> ${outputs.pesticide_reduced_kg} kg/year (${outputs.pesticide_reduced_pct}%)</p>
+  <p><strong>Pesticide reduction:</strong> ${outputs.pesticide_reduced_lbs} lbs/year (${outputs.pesticide_reduced_pct}%)</p>
     <p><strong>CO₂ avoided:</strong> ${outputs.co2_avoided_t} metric tons/year</p>
     <p><strong>Water saved:</strong> ${outputs.water_saved_l} liters/year</p>
     <p><strong>Estimated annual cost savings:</strong> $${outputs.cost_savings}</p>
@@ -1016,7 +1015,7 @@ function refreshUI(){
   if(latest && latest.outputs){
     // populate metric cards
     try{
-      $('metricPesticide').textContent = `${latest.outputs.pesticide_reduced_kg} kg / yr`;
+  $('metricPesticide').textContent = `${latest.outputs.pesticide_reduced_lbs || (latest.outputs.pesticide_reduced_kg*2.20462)} lbs / yr`;
       $('metricPesticidePct').textContent = `${latest.outputs.pesticide_reduced_pct}%`;
       $('metricCO2').textContent = `${latest.outputs.co2_avoided_t} t / yr`;
       $('metricWater').textContent = `${latest.outputs.water_saved_l} L / yr`;
