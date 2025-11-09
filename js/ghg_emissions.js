@@ -146,10 +146,11 @@ function updateSummaryCards() {
     : 0;
   const countryCount = new Set(ghgData.map(d => d.country)).size;
   
-  document.getElementById('ghgGlobalCO2').textContent = `${(totalCO2 / 1000).toFixed(1)}B t`;
+  // Format with clean units
+  document.getElementById('ghgGlobalCO2').textContent = `${(totalCO2 / 1000).toFixed(1)} Gt`;
   document.getElementById('ghgTopEmitter').textContent = topEmitter?.country || 'N/A';
-  document.getElementById('ghgPerCapita').textContent = `${avgPerCapita.toFixed(2)} t`;
-  document.getElementById('ghgCountryCount').textContent = countryCount;
+  document.getElementById('ghgPerCapita').textContent = `${avgPerCapita.toFixed(1)} t`;
+  document.getElementById('ghgCountryCount').textContent = countryCount.toLocaleString();
   
   console.log('✓ Summary cards updated');
 }
