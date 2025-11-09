@@ -395,7 +395,8 @@ function renderSourcePieChart() {
     'Oil': latestData.reduce((sum, d) => sum + (d.oil_co2 && d.oil_co2 > 0 ? d.oil_co2 : 0), 0),
     'Gas': latestData.reduce((sum, d) => sum + (d.gas_co2 && d.gas_co2 > 0 ? d.gas_co2 : 0), 0),
     'Cement': latestData.reduce((sum, d) => sum + (d.cement_co2 && d.cement_co2 > 0 ? d.cement_co2 : 0), 0),
-    'Flaring': latestData.reduce((sum, d) => sum + (d.flaring_co2 && d.flaring_co2 > 0 ? d.flaring_co2 : 0), 0)
+    'Flaring': latestData.reduce((sum, d) => sum + (d.flaring_co2 && d.flaring_co2 > 0 ? d.flaring_co2 : 0), 0),
+    'Agriculture (N₂O)': latestData.reduce((sum, d) => sum + (d.nitrous_oxide && d.nitrous_oxide > 0 ? d.nitrous_oxide : 0), 0)
   };
   
   // Filter out zero values
@@ -413,11 +414,12 @@ function renderSourcePieChart() {
       datasets: [{
         data: validSources.map(([_, val]) => val),
         backgroundColor: [
-          'rgba(75, 85, 99, 0.8)',
-          'rgba(234, 179, 8, 0.8)',
-          'rgba(59, 130, 246, 0.8)',
-          'rgba(107, 114, 128, 0.8)',
-          'rgba(249, 115, 22, 0.8)'
+          'rgba(75, 85, 99, 0.8)',    // Coal - dark gray
+          'rgba(234, 179, 8, 0.8)',    // Oil - yellow
+          'rgba(59, 130, 246, 0.8)',   // Gas - blue
+          'rgba(107, 114, 128, 0.8)',  // Cement - gray
+          'rgba(249, 115, 22, 0.8)',   // Flaring - orange
+          'rgba(34, 197, 94, 0.8)'     // Agriculture N2O - green
         ]
       }]
     },
@@ -433,7 +435,7 @@ function renderSourcePieChart() {
               const value = context.parsed || 0;
               const total = context.dataset.data.reduce((a, b) => a + b, 0);
               const percentage = ((value / total) * 100).toFixed(1);
-              return `${label}: ${value.toFixed(1)} Mt (${percentage}%)`;
+              return `${label}: ${value.toFixed(1)} Mt CO₂e (${percentage}%)`;
             }
           }
         }
