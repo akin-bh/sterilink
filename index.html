@@ -345,8 +345,10 @@
     <!-- (Removed modal) Inline request card is used instead for hackathon simplicity -->
 
     <!-- Inline request card: displayed on the page (hackathon friendly, not a modal) -->
-    <section id="inlineRequestCard" class="card hidden">
-      <h3>Request slot (inline)</h3>
+    <!-- Inline request card popup -->
+    <section id="inlineRequestCard" class="card hidden green-popup" role="dialog" aria-modal="true" aria-labelledby="inlineRequestCardTitle">
+      <button type="button" class="green-popup-close" id="inlineReqCloseBtn" aria-label="Close request popup">×</button>
+      <h3 id="inlineRequestCardTitle">Request slot</h3>
       <div id="inlineProviderInfo"></div>
       <label>Service
         <select id="inlineReqService"><option>SIT</option><option>Irradiation</option></select>

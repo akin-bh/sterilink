@@ -195,7 +195,9 @@ function initControls(){
   const inlineSend = $('inlineReqSend');
   if(inlineSend) inlineSend.addEventListener('click', (e)=>{ e.preventDefault(); submitInlineRequest(); });
   const inlineCancel = $('inlineReqCancel');
-  if(inlineCancel) inlineCancel.addEventListener('click', ()=>{ $('inlineRequestCard').classList.add('hidden'); });
+  if(inlineCancel) inlineCancel.addEventListener('click', ()=>{ $('inlineRequestCard').classList.add('hidden'); const bb=document.getElementById('inlineBackdrop'); if(bb) bb.remove(); });
+  const inlineCloseBtn = $('inlineReqCloseBtn');
+  if(inlineCloseBtn) inlineCloseBtn.addEventListener('click', ()=>{ $('inlineRequestCard').classList.add('hidden'); const bb=document.getElementById('inlineBackdrop'); if(bb) bb.remove(); });
 
   // Report controls
   $('downloadReport').addEventListener('click', ()=>window.print());
@@ -604,6 +606,32 @@ function openRequestModalForProvider(provider){
   // Always show the inline request card as a popup-like panel when clicking a provider
   const card = $('inlineRequestCard');
   if(card){
+    // Ensure dashboard visible (in case SPA is on another page)
+    try{
+      const md = document.getElementById('mainDashboard');
+      const pc = document.getElementById('pageContent');
+      if(pc) pc.classList.add('hidden');
+      if(md) md.classList.remove('hidden');
+      try{ history.replaceState(null, '', 'index.html'); }catch(e){}
+    }catch(e){}
+
+    // Add modal backdrop
+    if(!document.getElementById('inlineBackdrop')){
+      const b = document.createElement('div');
+      b.id = 'inlineBackdrop';
+      b.style.position = 'fixed';
+      b.style.inset = '0';
+      b.style.background = 'rgba(0,0,0,0.35)';
+      b.style.zIndex = '150';
+      b.addEventListener('click', ()=>{
+        try{ $('inlineRequestCard').classList.add('hidden'); }catch(e){}
+        const bb = document.getElementById('inlineBackdrop'); if(bb) bb.remove();
+      });
+      document.body.appendChild(b);
+      const escHandler = (ev)=>{ if(ev.key==='Escape'){ try{ $('inlineRequestCard').classList.add('hidden'); }catch(e){} const bb = document.getElementById('inlineBackdrop'); if(bb) bb.remove(); window.removeEventListener('keydown', escHandler);} };
+      window.addEventListener('keydown', escHandler);
+    }
+
     card.classList.remove('hidden');
     $('inlineProviderInfo').innerHTML = `<p><strong>${provider.name}</strong><br/>Services: ${provider.services}</p>`;
     const serv = provider.services && provider.services.split('|')[0];

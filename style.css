@@ -109,6 +109,22 @@ button[disabled]{opacity:0.6;cursor:not-allowed;transform:none;box-shadow:none}
 
 /* Inline request card */
 #inlineRequestCard{max-width:720px;margin:18px auto}
+/* Green popup variant */
+.green-popup{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%) scale(0.94);z-index:240;max-width:640px;width:92%;background:linear-gradient(165deg,#10b981 0%,#059669 55%,#047857 100%);color:#ecfdf5;border:2px solid #34d399;box-shadow:0 40px 70px -10px rgba(4,120,87,0.55),0 8px 20px rgba(0,0,0,0.25);padding:26px 24px;border-radius:20px;animation:popupIn .38s cubic-bezier(.16,.8,.24,1) forwards}
+.green-popup h3{margin-top:0;font-size:1.4rem;font-weight:800;color:#f0fdf4;letter-spacing:.5px}
+.green-popup label{font-size:.85rem;font-weight:600;color:#d1fae5;display:block;margin:12px 0 4px}
+.green-popup input,.green-popup select,.green-popup textarea{background:rgba(255,255,255,0.12);color:#ffffff;border:1px solid rgba(255,255,255,0.28)}
+.green-popup input:focus,.green-popup select:focus,.green-popup textarea:focus{outline:none;border-color:#6ee7b7;box-shadow:0 0 0 3px rgba(110,231,183,0.35)}
+.green-popup .form-row{margin-top:18px}
+.green-popup button{background:linear-gradient(180deg,#34d399,#10b981);border:0;color:#064e3b}
+.green-popup button#inlineReqCancel{background:rgba(255,255,255,0.15);color:#ecfdf5;border:1px solid rgba(255,255,255,0.35)}
+.green-popup button:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,0.25)}
+.green-popup-close{position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.18);color:#065f46;border:0;width:36px;height:36px;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer}
+.green-popup-close:hover{background:rgba(255,255,255,0.28)}
+@keyframes popupIn{0%{opacity:0;transform:translate(-50%,-46%) scale(.88)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.02)}100%{transform:translate(-50%,-50%) scale(1)}}
+
+/* Backdrop for modal */
+#inlineBackdrop{backdrop-filter:blur(3px)}
 
 /* Footer improvements */
 .footer{background:linear-gradient(180deg,#f0fbf4,#eefaf1);border-top:1px solid #e6f3ea;padding:18px 20px;color:#334155;margin-top:auto}
