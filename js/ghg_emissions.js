@@ -564,8 +564,8 @@ function getMetricLabel(metric) {
     'coal_co2': 'Coal CO₂ (Mt)',
     'oil_co2': 'Oil CO₂ (Mt)',
     'gas_co2': 'Gas CO₂ (Mt)',
-    'methane': 'Methane (Mt CO₂e)',
-    'nitrous_oxide': 'Nitrous Oxide (Mt CO₂e)'
+    'methane': 'Methane [incl. Agriculture] (Mt CO₂e)',
+    'nitrous_oxide': 'Nitrous Oxide [incl. Fertilizers/Pesticides] (Mt CO₂e)'
   };
   return labels[metric] || metric;
 }

@@ -308,9 +308,6 @@
           <label>Location / Farm address
             <input id="addressInputForm" placeholder="Start typing your farm or facility address and select from suggestions" />
           </label>
-          <label>Local climate (optional)
-            <div style="display:flex;gap:8px"><input id="climateTemp" type="number" placeholder="°C" style="width:80px"/><input id="climateHum" type="number" placeholder="% RH" style="width:80px"/></div>
-          </label>
 
           <input type="hidden" id="pendingProviderId" value="" />
 
@@ -423,8 +420,8 @@
               <option value="coal_co2">Coal CO₂</option>
               <option value="oil_co2">Oil CO₂</option>
               <option value="gas_co2">Gas CO₂</option>
-              <option value="methane">Methane</option>
-              <option value="nitrous_oxide">Nitrous Oxide</option>
+              <option value="methane">Methane [incl. Agriculture]</option>
+              <option value="nitrous_oxide">Nitrous Oxide [incl. Fertilizers/Pesticides]</option>
             </select>
           </div>
         </div>
