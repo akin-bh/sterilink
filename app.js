@@ -145,7 +145,7 @@ function initControls(){
   $('cancelJob').addEventListener('click', ()=>{ const f = $('jobForm'); if(f) f.reset(); showMessage('Form reset'); });
 
   $('calcBtn').addEventListener('click', (e)=>{ e.preventDefault(); previewReport(); });
-  $('jobForm').addEventListener('submit', (e)=>{ e.preventDefault(); requestSlotFromForm(); });
+  $('jobForm').addEventListener('submit', (e)=>{ e.preventDefault(); openRequestCardFromForm(); });
 
   // Wire range sliders -> display live values
   try{
@@ -615,22 +615,7 @@ function openRequestModalForProvider(provider){
       try{ history.replaceState(null, '', 'index.html'); }catch(e){}
     }catch(e){}
 
-    // Add modal backdrop
-    if(!document.getElementById('inlineBackdrop')){
-      const b = document.createElement('div');
-      b.id = 'inlineBackdrop';
-      b.style.position = 'fixed';
-      b.style.inset = '0';
-      b.style.background = 'rgba(0,0,0,0.35)';
-      b.style.zIndex = '150';
-      b.addEventListener('click', ()=>{
-        try{ $('inlineRequestCard').classList.add('hidden'); }catch(e){}
-        const bb = document.getElementById('inlineBackdrop'); if(bb) bb.remove();
-      });
-      document.body.appendChild(b);
-      const escHandler = (ev)=>{ if(ev.key==='Escape'){ try{ $('inlineRequestCard').classList.add('hidden'); }catch(e){} const bb = document.getElementById('inlineBackdrop'); if(bb) bb.remove(); window.removeEventListener('keydown', escHandler);} };
-      window.addEventListener('keydown', escHandler);
-    }
+    // Remove backdrop usage for side popup variant (keep code path lightweight)
 
     card.classList.remove('hidden');
     $('inlineProviderInfo').innerHTML = `<p><strong>${provider.name}</strong><br/>Services: ${provider.services}</p>`;
@@ -668,6 +653,34 @@ function submitInlineRequest(){
   refreshUI();
   showMessage('Order placed — we will contact you to confirm scheduling.');
   try{ location.hash = '#orders'; }catch(e){}
+}
+
+function openRequestCardFromForm(){
+  const card = $('inlineRequestCard');
+  if(!card) return;
+  // Side-of-form display: ensure it's positioned relative to form column
+  try{
+    const formCol = document.querySelector('.form-col');
+    if(formCol){
+      formCol.style.position = 'relative';
+      card.style.position = 'absolute';
+      card.style.top = '12px';
+      card.style.right = '-10px';
+      card.style.left = 'auto';
+      card.style.transform = 'none';
+    }
+  }catch(e){}
+  // Populate provider info generically if no provider selected
+  const prov = providers && providers.length ? providers[0] : {name:'Provider TBD',services:'SIT|Irradiation'};
+  $('inlineProviderInfo').innerHTML = `<p><strong>${prov.name}</strong><br/>Services: ${prov.services}</p>`;
+  const serv = $('serviceSelect') ? $('serviceSelect').value : 'SIT';
+  if($('inlineReqService')) $('inlineReqService').value = serv;
+  const summary = buildJobSummaryText();
+  $('inlineReqNotes').value = `Requesting ${serv} for ${summary}`;
+  const dt = new Date(Date.now() + 24*3600*1000); // +1 day
+  $('inlineReqDatetime').value = dt.toISOString().slice(0,16);
+  card.dataset.providerId = prov.id || prov.name || 'unknown';
+  card.classList.remove('hidden');
 }
 
 function requiredKeyInputsFilled(){
