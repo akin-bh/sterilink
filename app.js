@@ -145,7 +145,7 @@ function initControls(){
   $('cancelJob').addEventListener('click', ()=>{ const f = $('jobForm'); if(f) f.reset(); showMessage('Form reset'); });
 
   $('calcBtn').addEventListener('click', (e)=>{ e.preventDefault(); previewReport(); });
-  $('jobForm').addEventListener('submit', (e)=>{ e.preventDefault(); openRequestCardFromForm(); });
+  $('jobForm').addEventListener('submit', (e)=>{ e.preventDefault(); openRequestCardFromForm(e); });
 
   // Wire range sliders -> display live values
   try{
@@ -655,7 +655,7 @@ function submitInlineRequest(){
   try{ location.hash = '#orders'; }catch(e){}
 }
 
-function openRequestCardFromForm(){
+function openRequestCardFromForm(ev){
   const card = $('inlineRequestCard');
   if(!card) return;
   // Side-of-form display: ensure it's positioned relative to form column
@@ -664,10 +664,30 @@ function openRequestCardFromForm(){
     if(formCol){
       formCol.style.position = 'relative';
       card.style.position = 'absolute';
-      card.style.top = '12px';
-      card.style.right = '-10px';
-      card.style.left = 'auto';
       card.style.transform = 'none';
+
+      // Identify the submit button that triggered the event (modern browsers support e.submitter)
+      const anchorBtn = (ev && ev.submitter) ? ev.submitter : document.querySelector('#jobForm button[type="submit"]');
+      const formRect = formCol.getBoundingClientRect();
+      let topPx = 12;
+      let leftPx = formRect.width - (card.offsetWidth || 360) - 10; // default near right edge
+      if(anchorBtn){
+        const btnRect = anchorBtn.getBoundingClientRect();
+        // Calculate position relative to form column
+        topPx = Math.max(12, (btnRect.bottom - formRect.top) + 8);
+        leftPx = Math.max(8, (btnRect.left - formRect.left));
+        // Ensure the popup stays within form column width
+        // Temporarily reveal to measure width accurately
+        const prevHidden = card.classList.contains('hidden');
+        if(prevHidden){ card.style.visibility = 'hidden'; card.classList.remove('hidden'); }
+        const cardW = card.offsetWidth || 360;
+        if(prevHidden){ card.classList.add('hidden'); card.style.visibility = ''; }
+        const maxLeft = Math.max(8, formRect.width - cardW - 8);
+        leftPx = Math.min(leftPx, maxLeft);
+      }
+      card.style.top = `${topPx}px`;
+      card.style.left = `${leftPx}px`;
+      card.style.right = 'auto';
     }
   }catch(e){}
   // Populate provider info generically if no provider selected
@@ -681,6 +701,7 @@ function openRequestCardFromForm(){
   $('inlineReqDatetime').value = dt.toISOString().slice(0,16);
   card.dataset.providerId = prov.id || prov.name || 'unknown';
   card.classList.remove('hidden');
+  try{ card.scrollIntoView({block:'nearest'}); }catch(e){}
 }
 
 function requiredKeyInputsFilled(){
