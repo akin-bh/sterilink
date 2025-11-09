@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SteriLink — Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="min-h-screen flex bg-gray-50">
+      <!-- Left sidebar (floating rounded panel inspired by mockup) -->
+      <aside id="sideMenu" class="side-panel">
+        <div class="side-panel-inner">
+          <button class="side-close" id="sideClose" aria-label="Minimize sidebar" title="Minimize" aria-pressed="false">
+            <svg class="minimize-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6L9 12l6 6" stroke="#0b3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="side-avatar">
+            <div class="avatar-circle" aria-hidden="true">
+              <!-- user logo inside circle -->
+              <img src="public/images/logo.png" alt="SteriLink logo" class="avatar-logo" />
+            </div>
+          </div>
+          <h2 class="side-title">SteriLink</h2>
+          <div class="side-subtitle">Sustainable Scheduling</div>
+
+          <nav class="side-nav" aria-label="Main navigation">
+            <ul>
+              <li>
+                <a href="index.html" id="dashboardBtn" data-page="home" class="nav-item active">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7C3 5.89543 3.89543 5 5 5H9L11 7H19C20.1046 7 21 7.89543 21 9V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7Z" stroke="#0f4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-text">
+                    <div class="nav-title">Dashboard</div>
+                    <div class="nav-sub">Overview & monitoring</div>
+                  </div>
+                  <span class="nav-dot" aria-hidden="true"></span>
+                </a>
+              </li>
+              <li>
+                <!-- <a href="dataset.html" id="datasetBtn" data-page="dataset" class="nav-item">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7C3 5.89543 3.89543 5 5 5H9L11 7H19C20.1046 7 21 7.89543 21 9V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V7Z" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-text">
+                    <div class="nav-title">Data Set</div>
+                    <div class="nav-sub">CSV / providers</div>
+                  </div>
+                </a> -->
+              </li>
+              <li>
+                <a href="#" data-page="api" class="nav-item">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 7V3" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 7V3" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 21H17V11H7V21Z" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                    <div class="nav-text">
+                      <div class="nav-title">API & Data</div>
+                      <div class="nav-sub">Data sources & external libraries</div>
+                    </div>
+                </a>
+              </li>
+              <li>
+                <a href="#" data-page="formula" class="nav-item">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 12H16" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round"/><path d="M8 16H16" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round"/><path d="M10 8H14" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="nav-text"><div class="nav-title">Formula</div></div>
+                </a>
+              </li>
+              <li>
+                <a href="#" data-page="orders" class="nav-item">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 7H17V17H7V7Z" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                    <div class="nav-text"><div class="nav-title">Orders</div><div class="nav-sub">Requested orders</div></div>
+                </a>
+              </li>
+              <li>
+                <a href="#" data-page="settings" class="nav-item">
+                  <span class="menu-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" stroke="#d1f7e6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="nav-text"><div class="nav-title">Settings & Profile</div></div>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- <div class="side-footer">
+            <div class="side-user"> Desert Dev  <div class="side-user-role">System Administrator</div></div>
+          </div> -->
+        </div>
+      </aside>
+  <div class="flex-1 flex flex-col min-h-0">
+      <!-- <header class="topbar"> -->
+  <!-- <a href="index.html" class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/></a> -->
+    <!-- <div class="actions">
+      <a href="index.html" id="openNewJobHeader" class="brand-action">New Job / Schedule</a>
+    </div> -->
+      <!-- </header> -->
+      <div id="pageContent" class="p-4 bg-green-50 md:block">
+        <!-- Placeholder for side menu pages; content injected by JS -->
+      </div>
+  <div id="messageBar" class="card hidden" style="margin:10px auto;max-width:1100px;padding:10px;background:#fff7cc;color:#665200;border:1px solid #fde68a;">Message</div>
+
+  <main id="mainDashboard" class="container flex-1 overflow-auto">
+    <!-- Hero / banner (inspired by attached design) -->
+    <!-- <section class="hero">
+      <div class="hero-inner">
+  <h1>SteriLink</h1>
+        <p class="lead">A simple dashboard to schedule SIT & irradiation slots, discover nearby providers, and view sustainability snapshots for farms and food hubs.</p>
+      </div>
+    </section> -->
+
+    
+
+    <!-- Top metrics row -->
+    <section class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-icon">⚖️</div>
+        <div class="metric-body">
+          <div class="metric-title">Pesticide reduction</div>
+          <div class="metric-value" id="metricPesticide">— kg / yr</div>
+          <div class="metric-delta" id="metricPesticidePct">— %</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">🌍</div>
+        <div class="metric-body">
+          <div class="metric-title">CO₂ avoided</div>
+          <div class="metric-value" id="metricCO2">— t / yr</div>
+          <div class="metric-delta" id="metricCO2Delta">Based on user inputs</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">💧</div>
+        <div class="metric-body">
+          <div class="metric-title">Water saved</div>
+          <div class="metric-value" id="metricWater">— L / yr</div>
+          <div class="metric-delta">Estimated</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">💲</div>
+        <div class="metric-body">
+          <div class="metric-title">Cost savings</div>
+          <div class="metric-value" id="metricCost">— $ / yr</div>
+          <div class="metric-delta">Projected</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simplified demo: no sign-in (hackathon friendly) -->
+
+    <!-- Main content: two-column layout (form | providers map) -->
+    <section class="main-grid">
+      <aside class="left-col card form-col">
+        <h3>New Job / Schedule</h3>
+        <form id="jobForm">
+          <!-- <label>Contact name <input id="contactName" placeholder="Your name (for provider)" required></label> -->
+          <!-- <label>Contact email <input id="contactEmail" type="email" placeholder="you@example.com"></label> -->
+          <label>User type
+            <select id="formUserType">
+              <option>Farmer</option>
+              <option>Lab</option>
+              <option>Food Processor</option>
+              <option>Public Health</option>
+            </select>
+          </label>
+          <label>Service
+            <select id="serviceSelect">
+              <option value="SIT">SIT</option>
+              <option value="Irradiation">Irradiation</option>
+            </select>
+          </label>
+
+          <label>Farm/Facility Size
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="sizeInput" type="range" min="0" max="1000" step="1" value="10" />
+              <div style="display:flex;flex-direction:column;align-items:flex-start;min-width:120px">
+                <select id="sizeUnit"><option>acres</option><option>kg/month</option></select>
+                <div class="range-value" id="sizeInputDisplay">10</div>
+              </div>
+            </div>
+          </label>
+
+          <label>Current pesticide use (kg/year)
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="pesticideInput" type="range" min="0" max="5000" step="1" value="50" />
+              <div class="range-value" id="pesticideInputDisplay">50 kg / yr</div>
+            </div>
+          </label>
+
+          <label>Current pesticide cost ($/year)
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="pesticideCostYear" type="range" min="0" max="100000" step="10" value="1000" />
+              <div class="range-value" id="pesticideCostYearDisplay">$1,000 / yr</div>
+            </div>
+          </label>
+
+          <label>Current pesticide product names
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <select id="pesticideNamesSelect" style="width:100%;padding:6px;border-radius:6px;border:1px solid #e6eef0">
+                <option>Chlorpyrifos</option>
+                <option>Imidacloprid</option>
+                <option>Mancozeb</option>
+                <option>Glyphosate</option>
+                <option>Paraquat</option>
+                <option>Deltamethrin</option>
+                <option>Lambda-cyhalothrin</option>
+                <option>Fipronil</option>
+                <option>Permethrin</option>
+                <option>Spinosad</option>
+                <option>Abamectin</option>
+                <option>Bifenthrin</option>
+                <option>Carbaryl</option>
+                <option>Methomyl</option>
+                <option value="Other">Other</option>
+              </select>
+              <input id="pesticideNamesOther" placeholder="If Other, enter product name" style="display:none;padding:8px;border-radius:6px;border:1px solid #e6eef0" />
+              <div class="text-xs" style="color:#6b7280;margin-top:6px">Select Other to type a name.</div>
+            </div>
+          </label>
+
+          <label>Post-harvest loss %
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="lossInput" type="range" min="0" max="100" step="0.1" value="10" />
+              <div class="range-value" id="lossInputDisplay">10 %</div>
+            </div>
+          </label>
+
+          <label>Targeted pest, food type & treatment goal
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <div style="flex:1;min-width:220px">
+                  <div class="label-sm">Pest target</div>
+                  <select id="pestTargetSelect">
+                    <option value="">— Select pest target —</option>
+                    <option>Mediterranean Fruit Fly (Ceratitis capitata)</option>
+                    <option>Mexican Fruit Fly (Anastrepha ludens)</option>
+                    <option>Oriental Fruit Fly (Bactrocera dorsalis)</option>
+                    <option>Caribbean Fruit Fly (Anastrepha suspensa)</option>
+                    <option>Pink Bollworm (Pectinophora gossypiella)</option>
+                    <option>Codling Moth (Cydia pomonella)</option>
+                    <option>Tsetse Fly (Glossina spp.)</option>
+                    <option>Screwworm Fly (Cochliomyia hominivorax)</option>
+                    <option>Aedes aegypti (Dengue, Zika, Yellow Fever Vector)</option>
+                    <option>Aedes albopictus (Asian Tiger Mosquito)</option>
+                    <option>Anopheles stephensi (Malaria Vector)</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <input id="pestTargetOther" placeholder="If Other, specify pest" style="display:none;margin-top:6px;padding:8px;border-radius:6px;border:1px solid #e6eef0" />
+                </div>
+
+                <div style="flex:1;min-width:220px">
+                  <div class="label-sm">Food type</div>
+                  <select id="foodTargetSelect">
+                    <option value="">— Select food type —</option>
+                    <option>Mangoes</option>
+                    <option>Papayas</option>
+                    <option>Citrus Fruits</option>
+                    <option>Strawberries</option>
+                    <option>Potatoes</option>
+                    <option>Onions</option>
+                    <option>Wheat</option>
+                    <option>Rice</option>
+                    <option>Corn</option>
+                    <option>Beans and Lentils</option>
+                    <option>Beef</option>
+                    <option>Poultry</option>
+                    <option>Seafood</option>
+                    <option>Spices</option>
+                    <option>Dried Fruits and Nuts</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <input id="foodTargetOther" placeholder="If Other, specify food type" style="display:none;margin-top:6px;padding:8px;border-radius:6px;border:1px solid #e6eef0" />
+                </div>
+
+                <div style="flex:1;min-width:220px">
+                  <div class="label-sm">Treatment goal</div>
+                  <select id="treatmentGoalSelect">
+                    <option value="">— Select treatment goal —</option>
+                    <option>Disinfestation (Eliminate or Sterilize Insects)</option>
+                    <option>Decontamination (Reduce Pathogens like Salmonella or E. coli)</option>
+                    <option>Shelf-life Extension</option>
+                    <option>Export Compliance (Meet Quarantine Requirements)</option>
+                    <option>Food Safety Assurance</option>
+                    <option>Post-harvest Preservation</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <input id="treatmentGoalOther" placeholder="If Other, specify goal" style="display:none;margin-top:6px;padding:8px;border-radius:6px;border:1px solid #e6eef0" />
+                </div>
+              </div>
+            </div>
+          </label>
+
+          <label>Expected pesticide reduction % (default SIT efficacy 50%)
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="expectedReduction" type="range" min="0" max="100" step="1" value="50" />
+              <div class="range-value" id="expectedReductionDisplay">50 %</div>
+            </div>
+          </label>
+
+          
+          <label>Location / Farm address
+            <input id="addressInputForm" placeholder="Start typing your farm or facility address and select from suggestions" />
+          </label>
+          <label>Local climate (optional)
+            <div style="display:flex;gap:8px"><input id="climateTemp" type="number" placeholder="°C" style="width:80px"/><input id="climateHum" type="number" placeholder="% RH" style="width:80px"/></div>
+          </label>
+
+          <input type="hidden" id="pendingProviderId" value="" />
+
+          <div class="form-row">
+            <button type="button" id="calcBtn">Calculate & Preview Report</button>
+            <button type="submit">Request slot</button>
+            <button type="button" id="cancelJob">Reset</button>
+          </div>
+        </form>
+      </aside>
+
+      <aside class="right-col card map-col">
+        <h3>Providers near me</h3>
+        <input id="addressInput" placeholder="Enter farm address or place" autocomplete="off" />
+        <div style="font-size:0.85rem;color:#6b7280;margin-top:6px">Tip: choose a place from the suggestions that appear as you type.</div>
+        <div id="pesticideControls" style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label style="font-size:0.85rem;color:#374151;">Show pesticide overlay
+            <input type="checkbox" id="showPesticide" style="margin-left:6px" />
+          </label>
+          <label style="font-size:0.85rem;color:#374151;">Year
+            <select id="pesticideYearSelect" style="margin-left:6px"></select>
+          </label>
+          <label style="font-size:0.85rem;color:#374151;">State
+            <select id="pesticideStateSelect" style="min-width:160px;margin-left:6px"><option value="All">All</option></select>
+          </label>
+        </div>
+        <div id="map" style="height:520px;border-radius:6px;overflow:hidden;margin-top:8px"></div>
+      </aside>
+    </section>
+
+    <!-- Embedded pesticide dashboard removed per user preference (kept overlay controls above) -->
+
+    <!-- New Job / Schedule form moved into the dashboard cards (visible by default) -->
+
+    <!-- (Removed modal) Inline request card is used instead for hackathon simplicity -->
+
+    <!-- Inline request card: displayed on the page (hackathon friendly, not a modal) -->
+    <section id="inlineRequestCard" class="card hidden">
+      <h3>Request slot (inline)</h3>
+      <div id="inlineProviderInfo"></div>
+      <label>Service
+        <select id="inlineReqService"><option>SIT</option><option>Irradiation</option></select>
+      </label>
+      <label>Preferred date/time <input id="inlineReqDatetime" type="datetime-local"></label>
+      <label>Notes <textarea id="inlineReqNotes" rows="3"></textarea></label>
+      <div class="form-row">
+        <button id="inlineReqSend">Send request</button>
+        <button id="inlineReqCancel" type="button">Cancel</button>
+      </div>
+    </section>
+
+    <!-- Sustainability report preview -->
+    <section id="reportPreview" class="card hidden">
+      <h3>Sustainability Report</h3>
+      <div id="reportContent">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="form-row">
+        <button id="downloadReport">Download / Print</button>
+        <button id="closeReport">Close</button>
+      </div>
+    </section>
+
+    <!-- GHG Emissions Analytics Section -->
+    <section id="ghgEmissionsSection" class="container mx-auto px-2 sm:px-4 py-4 sm:py-8 mt-4 sm:mt-8">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">🌍 Global GHG Emissions Analytics</h2>
+      
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div class="p-3 sm:p-4 bg-blue-50 rounded-lg shadow-sm">
+          <div class="text-xs sm:text-sm text-gray-600">Global CO₂ (Latest)</div>
+          <div id="ghgGlobalCO2" class="text-lg sm:text-2xl font-bold text-blue-700">Loading...</div>
+        </div>
+        <div class="p-3 sm:p-4 bg-red-50 rounded-lg shadow-sm">
+          <div class="text-xs sm:text-sm text-gray-600">Top Emitter</div>
+          <div id="ghgTopEmitter" class="text-lg sm:text-2xl font-bold text-red-700">Loading...</div>
+        </div>
+        <div class="p-3 sm:p-4 bg-green-50 rounded-lg shadow-sm">
+          <div class="text-xs sm:text-sm text-gray-600">Avg per Capita</div>
+          <div id="ghgPerCapita" class="text-lg sm:text-2xl font-bold text-green-700">Loading...</div>
+        </div>
+        <div class="p-3 sm:p-4 bg-purple-50 rounded-lg shadow-sm">
+          <div class="text-xs sm:text-sm text-gray-600">Countries Tracked</div>
+          <div id="ghgCountryCount" class="text-lg sm:text-2xl font-bold text-purple-700">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-white rounded-lg shadow-sm">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">Filters</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+          <div>
+            <label class="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Country</label>
+            <select id="ghgCountryFilter" class="w-full p-2 text-sm border border-gray-300 rounded-md">
+              <option value="">All Countries</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Year Range</label>
+            <div class="flex gap-2">
+              <input type="number" id="ghgYearStart" placeholder="Start" class="w-full p-2 text-sm border border-gray-300 rounded-md" value="1990">
+              <input type="number" id="ghgYearEnd" placeholder="End" class="w-full p-2 text-sm border border-gray-300 rounded-md" value="2023">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs sm:text-sm font-medium text-gray-600 mb-1">Metric</label>
+            <select id="ghgMetricFilter" class="w-full p-2 text-sm border border-gray-300 rounded-md">
+              <option value="co2">Total CO₂</option>
+              <option value="co2_per_capita">CO₂ per Capita</option>
+              <option value="coal_co2">Coal CO₂</option>
+              <option value="oil_co2">Oil CO₂</option>
+              <option value="gas_co2">Gas CO₂</option>
+              <option value="methane">Methane</option>
+              <option value="nitrous_oxide">Nitrous Oxide</option>
+            </select>
+          </div>
+        </div>
+        <button id="ghgApplyFilters" class="mt-3 px-4 py-2 text-sm sm:text-base bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full sm:w-auto">Apply Filters</button>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+        <!-- Emissions Trend Chart -->
+        <div class="p-3 sm:p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-sm sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">📈 Emissions Trend Over Time</h3>
+          <div style="height: 250px; position: relative;" class="sm:h-300">
+            <canvas id="ghgTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Emitters Bar Chart -->
+        <div class="p-3 sm:p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-sm sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">🏭 Top 10 Emitters (Latest Year)</h3>
+          <div style="height: 250px; position: relative;" class="sm:h-300">
+            <canvas id="ghgTopEmittersChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Emissions by Source Pie Chart -->
+        <div class="p-3 sm:p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-sm sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">⚡ Emissions by Source</h3>
+          <div style="height: 250px; position: relative;" class="sm:h-300">
+            <canvas id="ghgSourcePieChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Regional Comparison -->
+        <div class="p-3 sm:p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-sm sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">🌐 Major Countries Comparison</h3>
+          <div style="height: 250px; position: relative;" class="sm:h-300">
+            <canvas id="ghgRegionalChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Country Breakdown Table -->
+      <div class="p-3 sm:p-4 bg-white rounded-lg shadow-md mb-4 sm:mb-6">
+        <h3 class="text-sm sm:text-lg font-semibold text-gray-700 mb-2 sm:mb-3">📊 Country Breakdown</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total CO₂ (Mt)</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Per Capita (t)</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Coal</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Oil</th>
+                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Gas</th>
+              </tr>
+            </thead>
+            <tbody id="ghgTableBody" class="bg-white divide-y divide-gray-200">
+              <tr><td colspan="7" class="px-2 sm:px-4 py-2 sm:py-3 text-center text-gray-500">Loading data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Export Options -->
+      <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        <button id="ghgExportCSV" class="px-4 py-2 text-sm sm:text-base bg-green-600 text-white rounded-md hover:bg-green-700 w-full sm:w-auto">📥 Export CSV</button>
+        <button id="ghgExportPDF" class="px-4 py-2 text-sm sm:text-base bg-red-600 text-white rounded-md hover:bg-red-700 w-full sm:w-auto">📄 Export PDF Report</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="col">
+  <div class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/><span class="brand-text"></span></div>
+        <!-- <p class="small-muted">Demo v1 — client-side prototype. Keep API keys restricted to your domain.</p> -->
+      </div>
+      <div class="col">
+        <h4>Quick links</h4>
+        <a href="#" onclick="location.reload();return false;">Reload providers</a>
+        <a href="providers.csv" target="_blank">View providers.csv</a>
+        <a href="#" id="openDocs">Docs</a>
+      </div>
+      <div class="col">
+        <h4>Contact</h4>
+        <p>akin-bh</p>
+        <p class="small-muted">Built for Desert Dev Lab hackathon </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Pass the Google Maps API key in the script below (provided by the user).
+  </script>
+  <!-- Chart.js CDN - Load first before our scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Tailwind CDN for quick styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Our application scripts -->
+  <script src="app.js" defer></script>
+  <script src="js/ghg_emissions.js" defer></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAecbUv8mzkrOZYMAOsDgJbVmIaMh1rXDA&libraries=places&callback=initMap"></script>
+</body>
+</html>

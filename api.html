@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>API — SterileLoop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Use site theme variables */
+    .center{max-width:980px;margin:48px auto;padding:28px;background:var(--card);border-radius:12px;border:1px solid rgba(11,68,33,0.03);box-shadow:0 6px 20px rgba(8,56,24,0.04)}
+    a.back{color:var(--accent-dark);font-weight:600;display:inline-block;margin-bottom:12px}
+    h1{color:var(--accent-dark)}
+    p.lead{color:#475569}
+    code{background:#f1f5f9;padding:4px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="flex h-screen">
+    <aside id="sideMenu" class="w-64 bg-white border-r hidden md:block">
+      <div class="p-4 border-b">
+  <a href="index.html" class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/><span class="brand-text">SteriLink</span></a>
+        <div class="text-sm text-gray-500">Navigation</div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li><a href="dataset.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Data Set used</a></li>
+          <li><a href="api.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">API</a></li>
+          <li><a href="formula.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Formula</a></li>
+          <li><a href="reports.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Reports</a></li>
+          <li><a href="settings.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col">
+      <header class="topbar">
+  <a href="index.html" class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/></a>
+        <div class="actions"><a href="index.html" class="brand-action">Back to Dashboard</a></div>
+      </header>
+
+      <main class="p-6">
+        <main class="center">
+          <a class="back" href="index.html">← Back to dashboard</a>
+          <h1>API & Data</h1>
+          <p class="lead">This page documents the data sources used in the demo and the third-party libraries integrated client-side. The demo is client-first; for production you should add server endpoints to persist bookings, provider records, and to generate signed/secure exports. Also restrict any public API keys by HTTP referrer.</p>
+
+          <h3 class="text-lg font-semibold text-green-700">Data Sources</h3>
+          <ul class="mt-2 text-sm text-gray-700">
+            <li>USDA/NASS — Estimated Annual Agricultural Pesticide Use (2013–2017) (pre-aggregated into <code>data/pesticide_summary.json</code>)</li>
+            <li>NRC — Radioisotope Facility Locations Database (used as a probe for irradiation provider locations)</li>
+            <li><em>Local demo data</em> — <code>providers.csv</code> (seeded sample providers for the map)</li>
+          </ul>
+
+          <h3 class="text-lg font-semibold text-green-700" style="margin-top:12px">External APIs &amp; Libraries</h3>
+          <ul class="mt-2 text-sm text-gray-700">
+            <li>Google Maps JavaScript API (Places) — provider maps & address autocomplete (restrict keys by HTTP referrer)</li>
+            <li>Chart.js (CDN) — interactive visualizations</li>
+            <li>jsPDF (CDN) — client-side PDF export for quick demos</li>
+            <li>Tailwind CSS (CDN) — utility styles used in some pages</li>
+          </ul>
+        </main>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports — SterileLoop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .center{max-width:980px;margin:48px auto;padding:28px;background:var(--card);border-radius:12px;border:1px solid rgba(11,68,33,0.03);box-shadow:0 6px 20px rgba(8,56,24,0.04)}
+    a.back{color:var(--accent-dark);font-weight:600;display:inline-block;margin-bottom:12px}
+    h1{color:var(--accent-dark)}
+    p.lead{color:#475569}
+    .report-list{margin-top:14px}
+    .report-item{padding:10px;border-radius:8px;background:rgba(11,68,33,0.03);margin-bottom:8px}
+  </style>
+</head>
+<body>
+  <div class="flex h-screen">
+    <aside id="sideMenu" class="w-64 bg-white border-r hidden md:block">
+      <div class="p-4 border-b">
+  <a href="index.html" class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/><span class="brand-text">SteriLink</span></a>
+        <div class="text-sm text-gray-500">Navigation</div>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li><a href="dataset.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Data Set used</a></li>
+          <li><a href="api.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">API</a></li>
+          <li><a href="formula.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Formula</a></li>
+          <li><a href="reports.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Reports</a></li>
+          <li><a href="settings.html" class="block p-2 rounded hover:bg-green-50 text-gray-700">Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col">
+      <header class="topbar">
+  <a href="index.html" class="brand"><img src="public/images/logo.png" alt="SteriLink logo" class="brand-logo"/></a>
+        <div class="actions"><a href="index.html" class="brand-action">Back to Dashboard</a></div>
+      </header>
+
+      <main class="p-6">
+        <main class="center">
+          <a class="back" href="index.html">← Back to dashboard</a>
+          <h1>Reports</h1>
+          <p class="lead">Saved ESG/impact reports (client-side demo stores these in localStorage). For production, reports should be persisted on the server.</p>
+
+          <div class="report-list" id="reportList">
+            <div class="report-item">No saved reports (demo stores reports in browser localStorage).</div>
+          </div>
+
+          <script>
+            // show any saved bookings/reports from localStorage (quick client-side preview)
+            try{
+              const raw = localStorage.getItem('sterile_bookings');
+              const container = document.getElementById('reportList');
+              if(raw){
+                const arr = JSON.parse(raw);
+                if(arr.length){
+                  container.innerHTML = '';
+                  arr.slice().reverse().forEach(b=>{
+                    const el = document.createElement('div'); el.className='report-item';
+                    el.innerHTML = `<strong>${b.userName}</strong> — ${b.service} — ${b.createdAt}<div style="font-size:0.9rem;color:#b6f3c6">${b.notes||''}</div>`;
+                    container.appendChild(el);
+                  });
+                }
+              }
+            }catch(e){console.warn(e)}
+          </script>
+        </main>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

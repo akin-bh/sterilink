@@ -1,0 +1,18 @@
+id,name,lat,lng,services,contact
+p-1,Mobile Lab A,38.9072,-77.0369,SIT|Irradiation,labA@example.com
+p-2,County Entomology Lab,40.7128,-74.0060,SIT,labB@example.org
+p-3,Regional Mobile Unit,34.0522,-118.2437,Irradiation|SIT,mobile@example.net
+p-4,Sandia National Laboratories,35.0526,-106.5408,SIT|Irradiation|Research,sandia@labs.gov
+p-5,Los Alamos National Laboratory,35.8791,-106.3031,Irradiation|Research,lanl@lanl.gov
+p-6,New Mexico State University Entomology Center,32.2816,-106.7470,SIT|Training,nmsu.entolab@nmsu.edu
+p-7,UNM Center for Sustainable Agriculture,35.0844,-106.6504,SIT|Advisory|Irradiation,unm.agcenter@unm.edu
+p-8,NM Department of Agriculture Field Lab,34.7304,-106.9930,SIT|Inspection|Irradiation,nmda.fieldlab@nm.gov
+p-9,Southwest Pest Control Research Hub,33.3943,-104.5230,SIT|Irradiation|Research,swpesthub@research.org
+p-10,Albuquerque Mobile Irradiation Unit,35.1983,-106.6544,Irradiation|SIT,abqmobileunit@nmtech.net
+p-11,New Mexico Tech Radiation Applications Lab,34.0669,-106.9057,Irradiation|Testing,nmtech.radiation@nmtech.edu
+p-12,Clovis Agricultural Innovation Center,34.4048,-103.2050,SIT|Irradiation|SoilTesting,clovisagcenter@nm.org
+p-13,Dynamic Aviation,38.3813,-78.9063,Sterile Insect Technique (SIT),https://www.dynamicaviation.com/1-sit/
+p-14,Rad Source Technologies,34.1207,-84.0044,SIT Irradiation Systems,https://radsource.com/solutions/sterile-insect-technique-sit/
+p-15,GLA Vector Control District,33.9472,-118.0853,Mosquito SIT Program,https://www.glamosquito.org/sterile-insect-technique-sit
+p-16,Collier Mosquito Control District,26.1776,-81.8069,Mosquito SIT Program,https://cmcd.org/science/sit/
+p-17,Sadex Corporation,42.4256,-96.3761,Food Irradiation,https://www.sadexcorp.com

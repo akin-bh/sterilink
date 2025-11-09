@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SteriLink — Pesticide Dashboard</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    html,body,#map{height:100%;}
+    body{font-family:Inter,system-ui,Arial; margin:0; display:flex; flex-direction:column; background:var(--bg, #eaf9f0);} 
+    .topbar{height:64px; display:flex;align-items:center;padding:0 18px;background:linear-gradient(90deg, rgba(6,95,70,0.08), rgba(6,95,70,0.04));backdrop-filter:blur(6px)}
+    .topbar .title{font-weight:700;color:#04382b}
+    .content{display:flex;flex-direction:column;flex:1;}
+    .map-wrap{flex:1;display:flex;}
+    #map{flex:1}
+    .side-panel{width:360px;padding:12px;background:rgba(255,255,255,0.96);box-shadow:0 8px 30px rgba(6,46,34,0.06);overflow:auto}
+    .controls{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .charts{display:flex;gap:12px;padding:12px;background:transparent}
+    .chart-card{flex:1;background:rgba(255,255,255,0.96);padding:12px;border-radius:10px;box-shadow:0 8px 30px rgba(6,46,34,0.04)}
+    .small{font-size:0.85rem;color:#155e47}
+    .muted{color:#4b6b60}
+    .legend{margin-top:8px;font-size:0.85rem}
+    .footer-note{padding:8px 12px;color:#445e53}
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="title">SteriLink — Pesticide Dashboard</div></div>
+  <div class="content">
+    <div class="map-wrap">
+      <div id="map"></div>
+      <aside class="side-panel">
+        <div class="controls">
+          <label class="small">Data (internal)</label>
+          <div class="small muted" style="margin-left:6px">Regional pesticide dataset (managed server-side). Clients cannot change this file.</div>
+          <input type="hidden" id="dataFilePath" value="data/HighEstimate_AgPestUsebyCropGroup92to16.txt">
+        </div>
+        <div class="controls">
+          <label class="small">Year:</label>
+          <select id="yearSelect"></select>
+        </div>
+        <div class="controls">
+          <button id="reloadBtn">Reload & Draw</button>
+          <div id="loadingHint" class="small muted" style="margin-left:8px">Note: dataset is large — first load may take a few seconds.</div>
+        </div>
+        <div id="stats" class="muted"></div>
+        <div class="footer-note">Place your tab-delimited file at <code>sterileloop/data/pesticides.txt</code> (or change the selector).</div>
+      </aside>
+    </div>
+    <div class="charts">
+      <div class="chart-card">
+        <canvas id="barChart" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <canvas id="pieChart" height="140"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Our dashboard script -->
+  <script type="module" src="js/pesticide_dashboard.js"></script>
+
+  <!-- Google Maps: API key inserted per user request -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAecbUv8mzkrOZYMAOsDgJbVmIaMh1rXDA&callback=initPesticideDashboard"></script>
+</body>
+</html>
