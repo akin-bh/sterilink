@@ -533,6 +533,24 @@
   <!-- Our application scripts -->
   <script src="app.js" defer></script>
   <script src="js/ghg_emissions.js" defer></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAecbUv8mzkrOZYMAOsDgJbVmIaMh1rXDA&libraries=places&callback=initMap"></script>
+  <!-- Load Google Maps dynamically using a local config.js (not committed). See config.example.js. -->
+  <script src="config.js" defer></script>
+  <script>
+    (function(){
+      function loadGoogleMaps(){
+        var key = (window.CONFIG && window.CONFIG.GMAPS_API_KEY) || '';
+        if(!key){
+          console.warn('Google Maps API key not configured. Create config.js with window.CONFIG.GMAPS_API_KEY.');
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(key) + '&libraries=places&callback=initMap';
+        s.async = true; s.defer = true;
+        document.body.appendChild(s);
+      }
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadGoogleMaps);
+      else loadGoogleMaps();
+    })();
+  </script>
 </body>
 </html>

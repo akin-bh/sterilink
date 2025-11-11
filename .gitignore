@@ -1,0 +1,10 @@
+# Local config containing secrets (do not commit)
+config.js
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# macOS
+.DS_Store
